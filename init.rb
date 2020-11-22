@@ -128,11 +128,7 @@ class Window < Gosu::Window
             glGetDoublev(GL_MODELVIEW_MATRIX, model_view)
             viewport = ([0] * 4).pack('L*')
             glGetIntegerv(GL_VIEWPORT, viewport)
-            pos_x, pos_y, pos_z = [0.0].pack('F'), [0.0].pack('F'), [0.0].pack('F')
-            
-            gluProject(@chara_x, @chara_y, @chara_z, model_view, projection, viewport, pos_x, pos_y, pos_z)
-            self.caption = [pos_x.unpack('F')[0].floor, pos_y.unpack('F')[0].floor, pos_z.unpack('F')[0].floor]
-            
+            pos_x, pos_y, pos_z = [0.0].pack('F'), [0.0].pack('F'), [0.0].pack('F')         
 
             @chara ||= Gosu::Image.new('./temp.png', retro: true)
             glBindTexture(GL_TEXTURE_2D, @chara.gl_tex_info.tex_name)
@@ -148,6 +144,9 @@ class Window < Gosu::Window
                 glTexCoord2d(r, t); glVertex3f(0.5, 1, 0)
             glEnd
             glPopMatrix
+
+            gluProject(@chara_x, @chara_y, @chara_z, model_view, projection, viewport, pos_x, pos_y, pos_z)
+            self.caption = [pos_x.unpack('F')[0].floor, pos_y.unpack('F')[0].floor, pos_z.unpack('F')[0].floor]
         end
         scale(2, 2) do
             Dialog.draw_text(self, 'Petite amélioration de la flèche, qu\'il va encore falloir placer en fonction de la cible du dialogue', 10, 10)
